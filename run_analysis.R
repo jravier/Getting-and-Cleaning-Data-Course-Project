@@ -5,6 +5,7 @@ datapath="UCI HAR Dataset"
 
 #####################################################################
 ##  run_analysis.R for the Getting and Cleaning Data Course Project
+#####################################################################
 ##
 ##      See the "How to use the script" section in the 
 ##      README.md file at the root of the repo
@@ -12,10 +13,21 @@ datapath="UCI HAR Dataset"
 ##              & run one of the 3 functions below
 ##
 #####################################################################
+##
+##      PLEASE read the CodeBook.md to understand why I did all this 
+##          in the section 4. below (Appropriately labels the data...)
+##          And why my resulting data set may look different from yours !
+##
+##  (as a side effect, this may tell you why a Code book is important :-) )
+##
+#####################################################################
+
+
+
 
 #####################################################################
-## this function returns a dataframe containing the data set to be submitted
-## as the result of the project. 
+## this function returns a dataframe containing the data set
+## to be submitted as the result of the project. 
 ##      See the ReadMe for more explanations on how to use it.
 ##      See the CodeBook for more explanations on what and why.
 ##      The code is also well commented, so you may just go reading it!
@@ -57,19 +69,19 @@ CourseProject<-function(){
     #! Tagging:
     #domain (time or frequence) of the measure
     featurecols$domain=ifelse(grepl("^(t|angle\\()",featurecols$V2), "time", "freq")
-    #measured quantity
+    #measured quantity: Gravity + Body quantities : Acc, AccJerk, Gyro, GyroJerk
     featurecols$quantity=ifelse(grepl("tGravityAcc",featurecols$V2), "gravity", 
                                 gsub("^(?:t|f|angle\\(t|angle\\()(?:Body)*(\\w+?)(?:Mag-|(?:Mean|Mean\\)|),|-).+",
                                      "\\1", featurecols$V2))
-    #measured component of the quantity
+    #measured component of the quantity: AngletoGravity, Magnitude, X, Y or Z 
     featurecols$component=ifelse(grepl("^angle\\(",featurecols$V2), "AngletoGravity", 
                                  ifelse(grepl("Mag-",featurecols$V2), "Magnitude", 
                                         gsub("[^-]+?-[^-]+?-([XYZ])$","\\1", featurecols$V2)))
-    #measurment taken on the component
+    #measurment taken on the component: Mean (capital M) for angles, mean or std for other components
     featurecols$measure=ifelse(grepl("^angle\\(",featurecols$V2), "Mean", 
                                gsub("[^-]+?-(\\w+?)\\(\\).*","\\1", featurecols$V2))
 
-    #! Construction of the new titles
+    #! Construction of the new column titles
     featurecols$title=paste(featurecols$domain, featurecols$quantity, 
                             featurecols$component, featurecols$measure, sep = ".")
     #! Rename the variables in the dataset
@@ -113,7 +125,7 @@ CourseProject<-function(){
 
 
 #####################################################################
-## this function just call the 1st one & write the data set to a text file.
+## this function just calls the 1st one & writes the data set to a text file.
 WriteDataSet<-function(){
     write.table(CourseProject(), file="VariableMeansBySubjectAndActivity.txt", row.name=FALSE)
 }
@@ -123,8 +135,8 @@ WriteDataSet<-function(){
 
 
 #####################################################################
-## this function can be called to get information about initial the dataset.
-## not used for producing the result dataset but useful at the beginning !
+## this function can be called to get information about the initial dataset.
+## /!\ not used for producing the result dataset but useful at the beginning !
 ##
 ## It scans through the files in the data directory 
 ## and output for each file:
@@ -135,13 +147,15 @@ WriteDataSet<-function(){
 ## an internal parameter can be adjusted to exclude non data files in the directory
 printInitialDataInfo<-function(){
     excludedfiles=c("README.txt", "features_info.txt")
+    
     dataFlist<-list.files(datapath, recursive = TRUE)
     datalist=data.frame()
     for (f in dataFlist){
         if(!f %in% excludedfiles) {
             fp=file.path(datapath, f)
             content<-fread(fp)  #, sep=" ", as.is = TRUE
-            fdesc<-list("file"=as.character(f),"size"=file.size(fp), "rows"=nrow(content), "cols"=ncol(content))
+            fdesc<-list("file"=as.character(f),"size"=file.size(fp), 
+                        "rows"=nrow(content), "cols"=ncol(content))
             datalist<-rbind(datalist,fdesc, stringsAsFactors=FALSE)
         }
     }
