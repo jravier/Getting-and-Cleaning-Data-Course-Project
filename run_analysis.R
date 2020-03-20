@@ -1,7 +1,7 @@
 library(data.table)
 library(dplyr)
 #datapath="./.RData"
-datapath="."
+datapath="UCI HAR Dataset"
 
 
 #####################################################################
@@ -54,7 +54,7 @@ CourseProject<-function(){
                                  ifelse(grepl("Mag-",featurecols$V2), "Magnitude", 
                                         gsub("[^-]+?-[^-]+?-([XYZ])$","\\1", featurecols$V2)))
     #measurment taken on the component
-    featurecols$measure=ifelse(grepl("^angle\\(",featurecols$V2), "(Mean)", 
+    featurecols$measure=ifelse(grepl("^angle\\(",featurecols$V2), "Mean", 
                                gsub("[^-]+?-(\\w+?)\\(\\).*","\\1", featurecols$V2))
 
     #! construction of the new titles
