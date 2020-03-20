@@ -1,21 +1,21 @@
 ---
-title: "Codebook"
+title: "CodeBook"
 subtitle: "Getting and Cleaning Data Course Project"
 author: "jravier"
 date: "20/03/2020"
 output: html_document
 ---
-This code book describes first the source data.  
-Next, It explains why the result variables and data are presented this way.  
-It then describes the transformations steps that I performed to clean up the data.  
-And it finaly details the form of the result data.  
+This codebook describes first the source data.  
+Next, It explains why the result data set is presented this way.  
+It then describes the transformations steps performed to clean up the data.  
+And it finaly details the form of the result data set.  
 
 ## Source
 The source data for this project was collected from the accelerometers and Gyroscopes sensors inside a Samsung Galaxy S smartphone attached to the waist of testing persons while performing different activities.  
 
 * The exact question(s) to which the analysis of this data is supposed to give answers is not verbalised in the information sources listed below (but may be given in the relevant scientific papers mentionned in them). Anyhow, we know from the experiment title that it has to do with **Human Activity Recognition**.  
 * The initial data is available for download from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip.  
-* It contains a README.txt file describing the data set.  
+* It contains a README.txt file and a codebook describing the data set.  
 * A full description is also available at the site where the data was obtained:
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones  
   
@@ -38,9 +38,9 @@ It consists of 561 variables (features), obtained (after pre-processing) by:
     + Calculating some frequency-domain variables from these output.  
     + Calculating some higher level variables from the 2 *variable sets* above. More on this below...  
 * Second, calculating statistically meaningful data out of the first step results, over the length of an observation: *mean*, *median*, *standard deviation*, *min*, *max*, etc.  
-    + These are the 561 features, aka the **final Source Variables**.  
+    + These are the source's final 561 features and so, our **Source Variables**.  
 
-The source data contains a file describing the produced features, their units and how they were obtained : features_info.txt.  
+The source data contains a CodeBook describing the produced features, their units and how they were obtained : features_info.txt.  
 
 #### Source Structure
 For each set (*train* & *test*), the data is broken down into 3 files:
@@ -114,7 +114,10 @@ New variables names are the concatenations (sep = ".") of the following 4 tokens
     + AngletoGravity or Magnitude for the gravity referential
     + X, Y or Z for the phone sensors referential
 * measure taken (mean or std). Enough self explanatory even if abbreviated.
-    + Please note the special token "(Mean)" for the angles, stressing that it is not the same as the means for the other components.
+    + Please note the special token "Mean" (capital M) for the angles, stressing that it is not the same as the means for the other components.
+
+The tokens are separated by a dot in the names, so they are clearly identified.
+It doesn't appear to be a problem for using the variables names in code.
 
 ## Transformation
 Given the above explanations, the transformation is easy to describe. Here are the steps taken by the script doing it:  
@@ -152,16 +155,16 @@ activity: the name of the activity (6 factors, as per the dictionary of the code
 #### Variables (73 columns)
 Each one in a subsequent column, in the following order.  
   
-time.Acc.AngletoGravity.(Mean)  
+time.Acc.AngletoGravity.Mean  
 time.Acc.Magnitude.mean  
 time.Acc.Magnitude.std  
-time.AccJerk.AngletoGravity.(Mean)  
+time.AccJerk.AngletoGravity.Mean  
 time.AccJerk.Magnitude.mean  
 time.AccJerk.Magnitude.std  
-time.Gyro.AngletoGravity.(Mean)  
+time.Gyro.AngletoGravity.Mean  
 time.Gyro.Magnitude.mean  
 time.Gyro.Magnitude.std  
-time.GyroJerk.AngletoGravity.(Mean)  
+time.GyroJerk.AngletoGravity.Mean  
 time.GyroJerk.Magnitude.mean  
 time.GyroJerk.Magnitude.std  
 time.Acc.X.mean  
@@ -196,9 +199,9 @@ time.gravity.Y.mean
 time.gravity.Y.std  
 time.gravity.Z.mean  
 time.gravity.Z.std  
-time.X.AngletoGravity.(Mean)  
-time.Y.AngletoGravity.(Mean)  
-time.Z.AngletoGravity.(Mean)  
+time.X.AngletoGravity.Mean  
+time.Y.AngletoGravity.Mean  
+time.Z.AngletoGravity.Mean  
 freq.Acc.Magnitude.mean  
 freq.Acc.Magnitude.std  
 freq.AccJerk.Magnitude.mean  
@@ -227,4 +230,13 @@ freq.Gyro.Z.mean
 freq.Gyro.Z.std  
 
 #### Values
-The value given for each variable of each observation in the result set is the average of all the values of the corresponding variable in the source, the observations being grouped by Subject and Activity.
+The value given for each variable of each observation in the result set is the average of all the values of the corresponding variable in the source, the observations being grouped by Subject and Activity.  
+  
+Units are the same as in the source. Depending of the domain and quantity measured:
+
+* Time domain:
+  + acc: m.s^-2^
+  + accJerk: m.s^-3^
+  + Gyro: rad.s^-1^
+  + GyroJerk: rad.s^-2^
+* Frequency domain: Hz
