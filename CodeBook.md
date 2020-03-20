@@ -240,3 +240,12 @@ Units are the same as in the source. Depending of the domain and quantity measur
   + Gyro: rad.s^-1^
   + GyroJerk: rad.s^-2^
 * Frequency domain: Hz
+
+#### File Format
+the resulting data set is stored as a table in a TXT file (west european text encoding)
+If can be read back into R using read.table() with a parameter header = TRUE.
+If you use another way to read it, these may be useful:
+* It has a header row and 180 observations row, each of 75 columns
+* Values are space-separted
+* character strings are double-quoted
+* Decimal point for numerical values is the dot(.) and decimal values are not rounded
