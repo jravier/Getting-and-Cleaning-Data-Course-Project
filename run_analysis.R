@@ -1,16 +1,21 @@
 library(data.table)
 library(dplyr)
-datapath="./.RData"
-#initialdatasets=c("test", "train")
+#datapath="./.RData"
+datapath="."
 
 
 #####################################################################
 ## this function returns a dataframe containing the data set to be submitted
-## as the result of the project. See the ReadMe file for more explanations.
+## as the result of the project. 
+##      See the ReadMe for more explanations on how to use it.
+##      See the CodeBook for more explanations on what and why.
+##      The code is also well commented, so you may just go reading it!
 CourseProject<-function(){
+    
     ## 1. Merges the training and the test sets to create one data set.
     fulldataset<-rbind(fread(file.path(datapath, "test", "X_test.txt")),
                        fread(file.path(datapath, "train", "X_train.txt")))
+    
     ## 2. Extracts only the measurements 
     ##    on the mean and standard deviation for each measurement.
     ##  a:  Start by reading the column names from the definition
@@ -32,11 +37,12 @@ CourseProject<-function(){
     activities$activity<-tblActivities[activities$V1, 2]
     
     ## 4. Appropriately labels the data set with descriptive variable names.
-    #       making nicer colnames (title) for the dataset here, 
-    #       breaking the original names (cf. codebook)
-    #       into meaningful bits : domain, quantity, component, measure
-    #       and rearranging them into ordered titles
+    #       making nicer colnames (title) for the dataset at the same time, 
+    #       looking at the original names (cf. source codebook)
+    #       tagging them with meaningful tokens for : domain, quantity, component, measure
+    #       and finally rearranging them into ordered titles
     
+    #! Tagging:
     #domain (time or frequence) of the measure
     featurecols$domain=ifelse(grepl("^(t|angle\\()",featurecols$V2), "time", "freq")
     #measured quantity
